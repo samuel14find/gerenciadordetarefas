@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{{block.super}} Gerenciador de Tarefas
+{% endblock %}
+{% block content %}
+<body class="page-landing">
+    <header class="landing-header">
+        <div class="logo">
+            <a href="{% url 'home' %}" style="display:flex; align-items:center;">
+                <img src="{% static '/lista-pura-v-horizontal.png' %}" alt="Lista Pura Logo" class="logo-img">
+            </a>
+        </div>
+        <nav>
+            <a href="#">Funcionalidades</a>
+            <a href="#">Blog</a>
+            <a href="{% url 'login'%}" class="btn-login">Entrar</a>
+        </nav>
+    </header>
+
+    <main class="landing-main">
+        <h1>Organize sua vida. Conquiste seus objetivos.</h1>
+        <p>O gerenciador de tarefas simples e poderoso que se adapta a você.</p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+            <a href="/cadastro" class="btn-cta">Comece gratuitamente</a>
+            <a href="{% url 'comentarios'%}" class="btn-secondary">Deixe um comentário</a>
+        </div>
+    </main>
+
+    <footer class="landing-footer">
+        <p>© 2025 Gerenciador de Tarefas - Todos os direitos reservados.</p>
+    </footer>
+{% endblock %}

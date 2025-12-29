@@ -1,0 +1,120 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Minhas Tarefas - MeuSistema{% endblock %}
+
+{# Define a aba ativa no menu lateral #}
+{% block content %}
+    {% with active_tab='tarefas' %}
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block header_title %}Executar Tarefas{% endblock %}
+{% block header_subtitle %}Foque no que importa agora.{% endblock %}
+
+{% block header_actions %}
+    <a href="{% url 'importar_tarefas' %}" style="text-decoration:none; display:inline-block; margin-right: 10px; background-color: #fff; color: #4CAF50; border: 1px solid #4CAF50; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 0.9rem;">
+        <i class="ph ph-upload-simple"></i> Importar CSV
+    </a>
+    <a href="{% url 'criar_tarefa' %}" class="btn-nova-tarefa" style="text-decoration:none; display:inline-block;">+ Nova Tarefa</a>
+{% endblock %}
+
+{% block dashboard_content %}
+    <style>
+        .status-nao_iniciado { background-color: #f0f0f0; color: #666; }
+        .status-em_andamento { background-color: #e3f2fd; color: #1976d2; }
+        .status-concluida { background-color: #e8f5e9; color: #2e7d32; }
+        
+        .task-details span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+    <div class="task-list-container">
+    {% for tarefa in tarefas %} 
+    <div class="task-item">
+        <div class="task-header">
+            <div class="task-info">
+                <div style="display: flex; gap: 8px; margin-bottom: 5px;">
+                    <span class="task-category"
+                          style="background-color: {{ tarefa.categoria.cor }}; color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem;">
+                        {{ tarefa.categoria.nome }}
+                    </span>
+                    
+                    <span class="task-status status-{{ tarefa.status }}" 
+                          style="padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; background-color: #eee; font-weight: bold;">
+                        {{ tarefa.get_status_display }}
+                    </span>
+                </div>
+
+                <h3>{{ tarefa.titulo }}</h3>
+
+                <div class="task-details" style="font-size: 0.85rem; color: #666; margin-top: 5px; display: flex; gap: 15px; align-items: center;">
+                    <span title="Responsável">
+                        <i class="ph ph-user"></i> {{ tarefa.usuario.nome|default:tarefa.usuario.email }}
+                    </span>
+                    
+                    <span title="Prazo">
+                        <i class="ph ph-calendar-blank"></i> 
+                        {{ tarefa.data_inicio|date:"d/m" }} - {{ tarefa.data_conclusao|date:"d/m/Y" }}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="task-right-side" style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
+                <div style="display: inline-flex; gap: 8px;">
+                     <a href="{% url 'arquivar_tarefa' tarefa.id %}" 
+                        id="btn-archive-{{ tarefa.id }}"
+                        title="Arquivar" 
+                        style="color: #f57c00; {% if tarefa.status != 'concluida' %}display: none;{% endif %}" 
+                        onclick="return confirm('Arquivar esta tarefa?');">
+                        <i class="ph ph-archive"></i>
+                    </a>
+                    <a href="{% url 'editar_tarefa' tarefa.id %}" title="Editar" style="color: #666;"><i class="ph ph-pencil-simple"></i></a>
+                    <a href="{% url 'deletar_tarefa' tarefa.id %}" title="Excluir" style="color: #d32f2f;"><i class="ph ph-trash"></i></a>
+                </div>
+
+                {% with progresso=tarefa.get_progresso %}
+                <div class="task-meta">
+                    <div class="progress-wrapper">
+                        <span class="progress-text">{{ progresso.feitas }}/{{ progresso.total }}</span>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: {{ progresso.porcentagem }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <i class="ph ph-caret-down accordion-icon"></i>
+                    
+                </div>
+                {% endwith %}
+            </div>
+        </div>
+        
+        <div class="task-body">
+            <ul class="step-list">
+            {% for etapa in tarefa.etapas.all %}
+                <li class="step-item {% if etapa.concluida %}completed{% endif %}">
+                    <label>
+                        <input type="checkbox" 
+                               {% if etapa.concluida %}checked{% endif %} 
+                               data-etapa-id="{{ etapa.id }}"
+                               onchange="toggleStep(this)">
+                        <span class="checkmark"></span>
+                        <span class="step-text">{{ etapa.descricao }}</span>
+                    </label>
+                </li>
+            {% empty %}
+                <li style="padding: 10px; color: #666;">Nenhuma etapa definida.</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% empty %}
+    <div style="text-align: center; padding: 40px;">
+        <h3>Nenhuma tarefa encontrada.</h3>
+        <p>Que tal criar uma nova tarefa?</p>
+    </div>
+    {% endfor %}
+    </div>
+{% endblock %}
