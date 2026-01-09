@@ -1,0 +1,57 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Tarefas Arquivadas - MeuSistema{% endblock %}
+
+{% block content %}
+    {% with active_tab='arquivadas' %}
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block header_title %}Tarefas Arquivadas{% endblock %}
+{% block header_subtitle %}Histórico de tarefas concluídas.{% endblock %}
+
+{% block header_actions %}
+    <a href="{% url 'exportar_tarefas_arquivadas' %}" style="text-decoration:none; display:inline-block; background-color: #fff; color: #4CAF50; border: 1px solid #4CAF50; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 0.9rem;">
+        <i class="ph ph-download-simple"></i> Exportar CSV
+    </a>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="task-list-container">
+    {% if tarefas %}
+        <table style="width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <thead style="background-color: #f9f9f9; text-align: left;">
+                <tr>
+                    <th style="padding: 15px; font-size: 0.9rem; color: #666;">Título</th>
+                    <th style="padding: 15px; font-size: 0.9rem; color: #666;">Descrição</th>
+                    <th style="padding: 15px; font-size: 0.9rem; color: #666;">Data Conclusão</th>
+                    <th style="padding: 15px; font-size: 0.9rem; color: #666;">Categoria</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tarefa in tarefas %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 15px; font-weight: bold;">{{ tarefa.titulo }}</td>
+                    <td style="padding: 15px; color: #555;">{{ tarefa.descricao|truncatechars:50|default:"-" }}</td>
+                    <td style="padding: 15px; color: #555;">{{ tarefa.atualizada_em|date:"d/m/Y H:i" }}</td>
+                    <td style="padding: 15px;">
+                        {% if tarefa.categoria %}
+                            <span style="background-color: {{ tarefa.categoria.cor }}; color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem;">
+                                {{ tarefa.categoria.nome }}
+                            </span>
+                        {% else %}
+                            <span style="color: #999;">-</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div style="text-align: center; padding: 40px;">
+            <h3>Nenhuma tarefa arquivada.</h3>
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}

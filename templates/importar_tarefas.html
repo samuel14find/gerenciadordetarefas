@@ -1,0 +1,54 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Importar Tarefas - MeuSistema{% endblock %}
+
+{% block content %}
+    {% with active_tab='tarefas' %}
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block header_title %}Importar Tarefas{% endblock %}
+{% block header_subtitle %}Faça upload de um arquivo CSV para criar múltiplas tarefas de uma vez.{% endblock %}
+
+{% block dashboard_content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    
+    <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px;">
+        <h3 style="margin-bottom: 20px; color: var(--primary-color); border-bottom: 1px solid #eee; padding-bottom: 10px;">
+            <i class="ph ph-upload-simple"></i> Selecionar Arquivo
+        </h3>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px;">Arquivo CSV</label>
+                {{ form.arquivo_csv }}
+                {% if form.arquivo_csv.errors %}
+                    <div style="color: red; font-size: 0.8rem;">{{ form.arquivo_csv.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div style="background: #e3f2fd; padding: 15px; border-radius: 4px; margin-bottom: 20px; font-size: 0.9rem; color: #0d47a1;">
+                <strong>Formato esperado do CSV:</strong><br>
+                <ul>
+                    <li>Separador: Vírgula (,) ou Ponto e Vírgula (;)</li>
+                    <li>Colunas (cabeçalho): <code>titulo</code>, <code>descricao</code>, <code>data_inicio</code>, <code>data_conclusao</code>, <code>status</code>, <code>categoria</code>, <code>etapas</code>.</li>
+                    <li>Datas: Aceita <code>DD-MM-YYYY</code>, <code>DD/MM/YYYY</code> ou <code>YYYY-MM-DD</code>.</li>
+                    <li>Etapas: Separe múltiplas etapas usando a barra vertical <code>|</code> (ex: <em>Comprar bolo | Comprar vela</em>).</li>
+                </ul>
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: flex-end;">
+                <a href="{% url 'minhas_tarefas' %}" style="padding: 10px 20px; color: #666; text-decoration: none; border: 1px solid #ccc; border-radius: 5px;">
+                    Cancelar
+                </a>
+                <button type="submit" style="background-color: var(--primary-color, #4CAF50); color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: bold;">
+                    Importar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

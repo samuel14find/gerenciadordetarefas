@@ -1,0 +1,796 @@
+/* --- Configurações Globais e Variáveis --- */
+:root {
+    --primary-color: #4a69bd; /* Azul profissional */
+    --secondary-color: #f1f5f9; /* Fundo cinza claro */
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --text-light: #666;
+    --border-color: #e2e8f0;
+    --font-family: 'Inter', sans-serif;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); 
+    
+    /* Cores de Status (Adicionadas para padronização) */
+    --color-danger: #F44336;
+    --color-warning: #FFC107;
+    --color-success: #4CAF50;
+    --color-info: #2196F3;
+}
+
+/* --- Estilos Globais de Body --- */
+body {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    margin: 0;
+}
+
+body.page-landing {
+    background-color: var(--card-bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+body.page-dashboard {
+    background-color: var(--secondary-color);
+    display: flex; /* Necessário para Sidebar + Main */
+}
+
+/* =================================================
+   --- Estilos da Landing Page ---
+================================================= */
+.landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 48px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.landing-header .logo {
+    display: flex;       /* Ajuda a centralizar a imagem verticalmente */
+    align-items: center; /* Garante que fique alinhado com o menu */
+    padding: 0;          /* Remove espaçamentos extras se houver */
+}
+
+/* A imagem em si (que adicionamos a classe .logo-img no HTML) */
+.logo-img {
+    height: 45px; /* Define a altura da logo para caber no menu */
+    width: auto;  /* A largura se ajusta sozinha para não distorcer a imagem */
+    display: block;
+}
+
+
+.landing-header nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.landing-header nav a {
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.landing-header nav a:hover {
+    color: var(--primary-color);
+}
+
+.btn-login {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 8px 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-login:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.landing-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 48px;
+}
+
+.landing-main h1 {
+    font-size: 3rem;
+    color: var(--text-color);
+    margin: 0 0 16px 0;
+    max-width: 600px;
+}
+
+.landing-main p {
+    font-size: 1.25rem;
+    color: var(--text-light);
+    margin: 0 0 32px 0;
+    max-width: 500px;
+}
+
+.btn-cta {
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    padding: 14px 28px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-cta:hover {
+    background-color: #3b56a0;
+}
+
+.landing-footer {
+    text-align: center;
+    padding: 24px 48px;
+    background-color: var(--secondary-color);
+    border-top: 1px solid var(--border-color);
+    color: var(--text-light);
+}
+
+.landing-footer p { margin: 0; font-size: 0.9rem; }
+
+.btn-secondary {
+    background-color: white;
+    color: var(--primary-color);
+    text-decoration: none;
+    padding: 14px 28px;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* ==================================================
+   --- Estilos do Dashboard ---
+================================================== */
+
+/* Layout */
+.sidebar {
+    width: 240px;
+    background-color: var(--card-bg);
+    border-right: 1px solid var(--border-color);
+    height: 100vh;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.main-content {
+    flex: 1;
+    padding: 24px 48px;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+/* Sidebar Elements */
+.logo h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-top: 0;
+}
+
+.main-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 500;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.nav-item:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.nav-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Header Dashboard */
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.main-header h1 { margin: 0; font-size: 1.75rem; }
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.btn-nova-tarefa {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none; /* Caso seja link <a> */
+    display: inline-block;
+    transition: background-color 0.2s ease;
+}
+
+.btn-nova-tarefa:hover { background-color: #3b56a0; }
+
+
+/* --- Grade de Estatísticas (Atualizado) --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background-color: var(--card-bg);
+    padding: 24px;
+    border-radius: 12px;
+    /* Borda e sombra sutis */
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color); /* Fallback */
+    
+    /* Layout Flex para Ícone + Texto */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* O círculo colorido do ícone */
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0; /* Garante que o ícone não amasse */
+}
+
+/* Título do Card (Ex: "Para Hoje") */
+.stat-card h3 {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+/* O Número Grande */
+.stat-card .stat-number {
+    margin: 5px 0 0 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+
+/* --- Ações Rápidas (Atualizado) --- */
+
+.quick-actions {
+    /* Força o container a organizar os filhos (H2 e Wrapper) em coluna */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espaço entre o título e os cartões */
+    margin-top: 40px;
+}
+
+.quick-actions h2 {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin: 0; /* Removemos a margem aqui pois o gap do pai já resolve */
+}
+
+/* Container flexível para os botões */
+.actions-wrapper {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap; /* Permite quebrar linha se a tela for pequena */
+    width: 100%; /* Garante que ocupe a largura disponível */
+}
+
+.action-card {
+    background-color: var(--card-bg);
+    padding: 15px 25px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #555;
+    
+    /* Visual */
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    
+    /* Layout interno do cartão */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    transition: transform 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.action-card:hover {
+    transform: translateY(-2px);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Card de Alerta (Vermelho) */
+.action-card.alert {
+    background-color: #ffebee;
+    color: var(--color-danger);
+    border: 1px solid #ffcdd2;
+}
+
+.action-card.alert:hover {
+    background-color: #ffcdd2;
+}
+
+
+/* ==================================================
+   --- Estilos da Página de Tarefas ---
+   ================================================== */
+.task-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 900px;
+}
+
+.task-item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+/* Header da Tarefa */
+.task-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--card-bg);
+}
+
+.task-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+/* Status Badges */
+.task-status {
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
+
+/* --- Lógica do Acordeão (Necessário para abrir/fechar) --- */
+
+.task-body {
+    display: none; /* ESSENCIAL: Esconde o corpo por padrão */
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border-top: 1px solid var(--border-color);
+    background-color: #f8fafc;
+}
+
+/* Quando ativo, mostra o corpo (seu CSS já tinha parte disso, mas garanta que está assim) */
+.task-item.active .task-body {
+    display: block !important;
+    opacity: 1;
+    animation: slideDown 0.3s ease forwards;
+}
+
+/* 2. Gira o ícone da seta quando ativo */
+.task-item.active .accordion-icon {
+    transform: rotate(180deg);
+}
+
+/* Animação suave opcional */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Estilos para Tarefa Concluída (100%) --- */
+.task-item.task-finished {
+    opacity: 0.8; /* Deixa a tarefa um pouco mais apagada */
+    border-color: #e2e8f0;
+}
+
+.task-item.task-finished h3 {
+    text-decoration: line-through; /* O risco no título */
+    color: #888;
+}
+
+/* Garante que o ícone de acordeão gire corretamente */
+.task-item.active .accordion-icon {
+    transform: rotate(180deg);
+}
+
+/* ==================================================
+   --- Estilos das Etapas (Checkboxes e Texto) ---
+   ================================================== */
+
+.step-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.step-item {
+    padding: 12px 24px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+.step-item:last-child {
+    border-bottom: none;
+}
+
+.step-item:hover {
+    background-color: #fff;
+}
+
+.step-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 12px;
+    width: 100%; /* Garante que clicar na linha toda marque o box */
+}
+
+/* 1. Esconde o checkbox padrão feio do navegador */
+.step-item input[type="checkbox"] {
+    display: none;
+}
+
+/* 2. Cria o quadrado do checkbox personalizado */
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    background-color: white;
+    flex-shrink: 0; /* Impede que o quadrado amasse se o texto for longo */
+}
+
+/* 3. Estilo quando o checkbox está MARCADO (Estado Input) */
+.step-item input:checked + .checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* O símbolo de "check" (✓) feito com CSS puro */
+.step-item input:checked + .checkmark::after {
+    content: '';
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
+}
+
+/* 4. Estilo do Texto */
+.step-text {
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+/* --- A MÁGICA ACONTECE AQUI: O Efeito Riscado --- */
+/* Quando a LI tem a classe .completed (colocada pelo seu JS) */
+
+.step-item.completed .step-text {
+    text-decoration: line-through; /* Risca o texto */
+    color: #94a3b8; /* Deixa o texto cinza claro */
+    opacity: 0.8;
+}
+
+/* Opcional: Deixa o fundo levemente diferente quando concluído */
+.step-item.completed {
+    background-color: #f8fafc;
+}
+
+/* ==================================================
+   --- Login Page Styles ---
+   ================================================== */
+body.page-login {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #dbeafe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.login-card {
+    background: var(--card-bg);
+    padding: 3rem 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    max-width: 420px;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.login-header h2 {
+    color: var(--primary-color);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.login-header p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* Form Styles */
+.login-form p {
+    margin-bottom: 1.5rem;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(74, 105, 189, 0.1);
+}
+
+.btn-login-submit {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.btn-login-submit:hover {
+    background-color: #3b56a0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-login-submit:active {
+    transform: translateY(0);
+}
+
+/* Footer Link */
+.login-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.login-footer a {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 500;
+}
+
+.login-footer a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+
+/* ==================================================
+   --- Página de Comentários (Novo) ---
+   ================================================== */
+
+body.page-comment {
+    background-color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px; /* Espaço em telas menores */
+    box-sizing: border-box;
+}
+
+.comment-card {
+    background-color: var(--card-bg);
+    width: 100%;
+    max-width: 600px;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* Sombra suave e moderna */
+    animation: fadeIn 0.5s ease-out;
+}
+
+.comment-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.comment-header h2 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin: 0 0 8px 0;
+}
+
+.comment-header p {
+    color: var(--text-light);
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* Form Styles */
+.comment-form .form-group {
+    margin-bottom: 20px;
+}
+
+.comment-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.95rem;
+}
+
+.comment-form input[type="text"],
+.comment-form input[type="email"],
+.comment-form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: var(--font-family);
+    color: var(--text-color);
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.comment-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.comment-form input:focus,
+.comment-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(74, 105, 189, 0.15); /* Ring focus */
+}
+
+.form-text {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 6px;
+    display: block;
+}
+
+/* Buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.btn-cancel {
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-light);
+    font-weight: 500;
+    background-color: transparent;
+    transition: color 0.2s;
+    border: 1px solid transparent;
+}
+
+.btn-cancel:hover {
+    color: var(--text-color);
+    background-color: #f1f5f9;
+}
+
+.btn-submit {
+    padding: 12px 28px;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px -1px rgba(74, 105, 189, 0.2);
+}
+
+.btn-submit:hover {
+    background-color: #3b56a0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px -1px rgba(74, 105, 189, 0.3);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+

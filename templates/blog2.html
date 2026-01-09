@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+  {{block.super}}: Blog
+  
+{% endblock %}
+
+{% block content %}
+
+  <h1>Meu Blog Pessoal</h1>
+  <ul>
+    {% for item in blog %}
+      <li>{{ item }}</li>
+    {% endfor %}
+  </ul>
+  
+{% endblock content %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body_class %}page-comment{% endblock %}
+
+{% block content %}
+<div class="comment-card">
+    <div class="comment-header">
+        <h2>Deixe seu Comentário</h2>
+        <p>Compartilhe suas ideias ou feedback sobre essa tarefa.</p>
+    </div>
+
+    <form method="post" class="comment-form">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+                <small class="form-text">{{ field.help_text }}</small>
+            {% endif %}
+            {% for error in field.errors %}
+                <div style="color: #dc2626; font-size: 0.85rem; margin-top: 5px;">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <a href="javascript:history.back()" class="btn-cancel">Cancelar</a>
+            <button type="submit" class="btn-submit">Enviar Comentário</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

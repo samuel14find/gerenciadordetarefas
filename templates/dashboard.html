@@ -1,0 +1,87 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Painel - MeuSistema{% endblock %}
+
+{% block content %}
+    {% with active_tab='painel' %}
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block header_title %}Olá, {{ user.nome|default:user.email }}!{% endblock %}
+{% block header_subtitle %}Aqui está o resumo do seu dia.{% endblock %}
+
+{% block header_actions %}
+    <a href="{% url 'criar_tarefa' %}" class="btn-nova-tarefa">+ Nova Tarefa</a>
+{% endblock %}
+
+{% block dashboard_content %}
+    
+    <section class="stats-grid">
+        
+        <div class="stat-card" style="border-left: 4px solid #2196F3;">
+            <div class="stat-icon" style="background: #e3f2fd; color: #2196F3;">
+                <i class="ph ph-calendar-check"></i>
+            </div>
+            <div>
+                <h3>Para Hoje</h3>
+                <p class="stat-number">{{ hoje }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card" style="border-left: 4px solid #FFC107;">
+            <div class="stat-icon" style="background: #fff8e1; color: #FFC107;">
+                <i class="ph ph-star"></i>
+            </div>
+            <div>
+                <h3>Foco Atual</h3>
+                <p class="stat-number">{{ foco }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card" style="border-left: 4px solid #F44336;">
+            <div class="stat-icon" style="background: #ffebee; color: #F44336;">
+                <i class="ph ph-warning-circle"></i>
+            </div>
+            <div>
+                <h3>Atrasadas</h3>
+                <p class="stat-number">{{ atrasadas }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card completed" style="border-left: 4px solid #4CAF50;">
+            <div class="stat-icon" style="background: #e8f5e9; color: #4CAF50;">
+                <i class="ph ph-check-circle"></i>
+            </div>
+            <div>
+                <h3>Concluídas</h3>
+                <p class="stat-number">{{ concluidas }} <span style="font-size: 0.9rem; color: #888; font-weight: normal;">/ {{ total }}</span></p>
+            </div>
+        </div>
+        
+    </section>
+
+    <section class="quick-actions" style="margin-top: 40px;">
+        <h2>Acesso Rápido</h2>
+        
+        <div class="actions-wrapper">
+            <a href="{% url 'minhas_tarefas' %}" class="action-card">
+                <i class="ph ph-list-dashes"></i>
+                Ver todas as tarefas
+            </a>
+            
+            <a href="{% url 'categoriastarefa' %}" class="action-card">
+                <i class="ph ph-tag"></i>
+                Gerenciar Categorias
+            </a>
+            
+            {% if atrasadas > 0 %}
+            <a href="{% url 'minhas_tarefas' %}?filtro=atrasadas" class="action-card alert">
+                <i class="ph ph-fire"></i>
+                Resolver Pendências ({{ atrasadas }})
+            </a>
+            {% endif %}
+        </div>
+    </section>
+
+{% endblock %}

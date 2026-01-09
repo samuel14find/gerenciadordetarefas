@@ -1,0 +1,70 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}{{ titulo_pagina }} - MeuSistema{% endblock %}
+
+{% block content %}
+    {% with active_tab='categorias' %}
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block header_title %}{{ titulo_pagina }}{% endblock %}
+{% block header_subtitle %}Preencha os dados da categoria{% endblock %}
+
+{% block dashboard_content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px;">
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px;">Nome da Categoria</label>
+                {{ form.nome }}
+                {% if form.nome.errors %}
+                    <div style="color: red; font-size: 0.8rem;">{{ form.nome.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; margin-bottom: 5px;">Cor (Hexadecimal)</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    {{ form.cor }}
+                    <span style="font-size: 0.8rem; color: #666;">Escolha uma cor para identificar visualmente.</span>
+                </div>
+                {% if form.cor.errors %}
+                    <div style="color: red; font-size: 0.8rem;">{{ form.cor.errors }}</div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div style="display: flex; gap: 15px; justify-content: flex-end;">
+            <a href="{% url 'categoriastarefa' %}" style="padding: 12px 25px; color: #666; text-decoration: none; border: 1px solid #ccc; border-radius: 5px;">
+                Cancelar
+            </a>
+            <button type="submit" style="background-color: var(--primary-color, #4CAF50); color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: bold;">
+                Salvar Categoria
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<style>
+    .form-group input[type="text"],
+    .form-group input[type="color"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .form-group input[type="color"] {
+        width: 50px;
+        height: 40px;
+        padding: 2px;
+    }
+</style>
+{% endblock %}

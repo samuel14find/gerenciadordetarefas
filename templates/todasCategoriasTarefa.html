@@ -1,0 +1,63 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block content %}
+    {% with active_tab='categorias' %}
+    {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block header_title %}Categorias de Tarefas{% endblock %}
+{% block header_subtitle %}Gerencie como suas tarefas são organizadas{% endblock %}
+
+{% block header_actions %}
+    <a href="{% url 'criar_categoria' %}" class="btn-nova-tarefa" style="text-decoration:none; display:inline-block;">+ Nova Categoria</a>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="stats-grid">
+        {% for categoria in todas %}
+        <div class="stat-card" style="position: relative; border-left: 5px solid {{ categoria.cor }}; transition: transform 0.2s;">
+            <a href="{% url 'categoriatarefa' categoria.id %}" style="text-decoration: none; display: flex; align-items: center; gap: 15px; width: 100%;">
+                <div class="stat-icon" style="background-color: {{ categoria.cor }}20; color: {{ categoria.cor }}; font-weight: bold;">
+                    {{ categoria.nome|slice:":1"|upper }}
+                </div>
+                <div>
+                    <h3 style="color: var(--text-color); font-weight: 600; margin: 0;">{{ categoria.nome }}</h3>
+                    <span style="font-size: 0.8rem; color: var(--text-light);">Criada em {{ categoria.criado_em|date:"d/m/Y" }}</span>
+                </div>
+            </a>
+            
+            <div style="position: absolute; top: 15px; right: 15px; display: flex; gap: 8px;">
+                <a href="{% url 'editar_categoria' categoria.id %}" title="Editar" style="color: #666;"><i class="ph ph-pencil-simple"></i></a>
+                <a href="{% url 'deletar_categoria' categoria.id %}" title="Excluir" style="color: #d32f2f;"><i class="ph ph-trash"></i></a>
+            </div>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-light);">
+            Nenhuma Categoria Cadastrada
+        </div>
+        {% endfor %}
+    </div>
+
+        {% if page.has_other_pages %}
+        <div class="pagination">
+            {% if page.has_previous %}
+                <a href="?page={{ page.previous_page_number }}">Anterior</a>
+            {% endif %}
+            
+            {% if page.has_next %}
+                <a href="?page={{ page.next_page_number }}">Próxima</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    <style>
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+
+{% endblock %}

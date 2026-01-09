@@ -1,0 +1,29 @@
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables
+.env
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+/GerenciadorDeTarefas/settings/production.py
+/GerenciadorDeTarefas/wsgi.py
+manage.py
+stderr.log
+logs/

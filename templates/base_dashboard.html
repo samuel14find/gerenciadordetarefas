@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body_class %}page-dashboard{% endblock %}
+
+{% block content %}
+    <aside class="sidebar">
+        <div class="logo" style="text-align: center; margin-bottom: 20px;">
+        <a href="{% url 'painel' %}"> <img src="{% static '/lista-pura-v-horizontal.png' %}" 
+                 alt="Lista Pura" 
+                 style="max-width: 80%; height: auto; display: block; margin: 0 auto;">
+        </a>
+        </div>
+        <nav class="main-nav">
+            <a href="{% url 'painel' %}" class="nav-item {% if active_tab == 'painel' %}active{% endif %}">Painel</a>
+            <a href="{% url 'minhas_tarefas' %}" class="nav-item {% if active_tab == 'tarefas' %}active{% endif %}">Tarefas</a>
+            <a href="{% url 'tarefas_arquivadas' %}" class="nav-item {% if active_tab == 'arquivadas' %}active{% endif %}">Arquivadas</a>
+            <a href="{% url 'categoriastarefa' %}" class="nav-item {% if active_tab == 'categorias' %}active{% endif %}">Categorias</a>
+            <a href="#" class="nav-item">Blog</a>
+            <a href="{% url 'wiki:get' path='' %}" class="nav-item {% if 'wiki' in request.path %}active{% endif %}">Wiki</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="main-header">
+            <div>
+                <h1>{% block header_title %}Título da Página{% endblock %}</h1>
+                <p style="color: var(--text-light); margin-top: 5px;">
+                    {% block header_subtitle %}{% endblock %}
+                </p>
+            </div>
+            
+            <div class="header-actions">
+                {% block header_actions %}
+                {% endblock %}
+                
+                <div class="user-profile">
+                     <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" style="background:none; border:none; cursor:pointer; color: inherit;">Sair</button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-wrapper">
+            {% block dashboard_content %}
+            {% endblock %}
+        </div>
+    </main>
+{% endblock %}
