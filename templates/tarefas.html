@@ -20,17 +20,6 @@
 {% endblock %}
 
 {% block dashboard_content %}
-    <style>
-        .status-nao_iniciado { background-color: #f0f0f0; color: #666; }
-        .status-em_andamento { background-color: #e3f2fd; color: #1976d2; }
-        .status-concluida { background-color: #e8f5e9; color: #2e7d32; }
-        
-        .task-details span {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-    </style>
     <div class="task-list-container">
     {% for tarefa in tarefas %} 
     <div class="task-item">
@@ -38,19 +27,22 @@
             <div class="task-info">
                 <div style="display: flex; gap: 8px; margin-bottom: 5px;">
                     <span class="task-category"
-                          style="background-color: {{ tarefa.categoria.cor }}; color: #fff; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem;">
+                          style="background-color: {{ tarefa.categoria.cor }};">
                         {{ tarefa.categoria.nome }}
                     </span>
                     
-                    <span class="task-status status-{{ tarefa.status }}" 
-                          style="padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; background-color: #eee; font-weight: bold;">
+                    <span class="task-status status-{{ tarefa.status }}">
                         {{ tarefa.get_status_display }}
                     </span>
                 </div>
 
                 <h3>{{ tarefa.titulo }}</h3>
+                
+                {% if tarefa.descricao %}
+                <p class="task-description">{{ tarefa.descricao }}</p>
+                {% endif %}
 
-                <div class="task-details" style="font-size: 0.85rem; color: #666; margin-top: 5px; display: flex; gap: 15px; align-items: center;">
+                <div class="task-details">
                     <span title="Responsável">
                         <i class="ph ph-user"></i> {{ tarefa.usuario.nome|default:tarefa.usuario.email }}
                     </span>
