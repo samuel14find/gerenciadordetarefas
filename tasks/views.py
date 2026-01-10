@@ -129,44 +129,50 @@ def painel(request):
     # 1. Pegamos a data de hoje (sem as horas)
     hoje_data = timezone.now().date()
     
-    # 2. Base: Pegamos todas as tarefas do usuário
-    tarefas = Tarefa.objects.filter(usuario=request.user)
+    # 2. Base: Pegamos todas as tarefas do usuário (não arquivadas)
+    tarefas_base = Tarefa.objects.filter(usuario=request.user, arquivada=False).prefetch_related('etapas', 'categoria')
     
-    # --- CÁLCULOS ---
+    # --- CÁLCULOS E LISTAS ---
     
     # Total Geral
-    total = tarefas.count()
+    total = tarefas_base.count()
     
-    # Concluídas
-    concluidas = tarefas.filter(status=Tarefa.StatusChoices.CONCLUIDA).count()
-    
-    # Pendentes (Não iniciadas ou Em andamento)
-    pendentes = total - concluidas
-    
-    # Tarefas para HOJE: Vencem hoje E não estão concluídas
-    tarefas_hoje = tarefas.filter(
+    # Para Hoje: Vencem hoje E não estão concluídas
+    tarefas_hoje_list = tarefas_base.filter(
         data_conclusao=hoje_data
     ).exclude(
         status=Tarefa.StatusChoices.CONCLUIDA
-    ).count()
+    )
     
-    # Tarefas ATRASADAS: Vencimento menor que hoje E não estão concluídas
-    atrasadas = tarefas.filter(
-        data_conclusao__lt=hoje_data # __lt significa "Less Than" (menor que)
+    # Foco Atual: Marcadas com focus_atual E não concluídas
+    tarefas_foco_list = tarefas_base.filter(
+        is_foco_atual=True
     ).exclude(
         status=Tarefa.StatusChoices.CONCLUIDA
-    ).count()
+    )
     
-    # Foco Atual: Quantas marcadas com a estrelinha de foco?
-    foco = tarefas.filter(is_foco_atual=True).exclude(status=Tarefa.StatusChoices.CONCLUIDA).count()
+    # Atrasadas: Vencimento menor que hoje E não estão concluídas
+    tarefas_atrasadas_list = tarefas_base.filter(
+        data_conclusao__lt=hoje_data
+    ).exclude(
+        status=Tarefa.StatusChoices.CONCLUIDA
+    )
+    
+    # Concluídas
+    tarefas_concluidas_list = tarefas_base.filter(
+        status=Tarefa.StatusChoices.CONCLUIDA
+    )
 
     context = {
         'total': total,
-        'concluidas': concluidas,
-        'pendentes': pendentes,
-        'hoje': tarefas_hoje,
-        'atrasadas': atrasadas,
-        'foco': foco,
+        'hoje': tarefas_hoje_list.count(),
+        'foco': tarefas_foco_list.count(),
+        'atrasadas': tarefas_atrasadas_list.count(),
+        'concluidas': tarefas_concluidas_list.count(),
+        'tarefas_hoje_list': tarefas_hoje_list,
+        'tarefas_foco_list': tarefas_foco_list,
+        'tarefas_atrasadas_list': tarefas_atrasadas_list,
+        'tarefas_concluidas_list': tarefas_concluidas_list,
     }
     
     return render(request, 'dashboard.html', context)

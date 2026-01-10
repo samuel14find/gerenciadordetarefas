@@ -15,11 +15,14 @@
     <a href="{% url 'criar_tarefa' %}" class="btn-nova-tarefa">+ Nova Tarefa</a>
 {% endblock %}
 
+{% block extra_head %}
+{% endblock %}
+
 {% block dashboard_content %}
     
     <section class="stats-grid">
         
-        <div class="stat-card" style="border-left: 4px solid #2196F3;">
+        <div class="stat-card interactive" style="border-left: 4px solid #2196F3;" onclick="showTasks('hoje')">
             <div class="stat-icon" style="background: #e3f2fd; color: #2196F3;">
                 <i class="ph ph-calendar-check"></i>
             </div>
@@ -29,7 +32,7 @@
             </div>
         </div>
 
-        <div class="stat-card" style="border-left: 4px solid #FFC107;">
+        <div class="stat-card interactive" style="border-left: 4px solid #FFC107;" onclick="showTasks('foco')">
             <div class="stat-icon" style="background: #fff8e1; color: #FFC107;">
                 <i class="ph ph-star"></i>
             </div>
@@ -39,7 +42,7 @@
             </div>
         </div>
 
-        <div class="stat-card" style="border-left: 4px solid #F44336;">
+        <div class="stat-card interactive" style="border-left: 4px solid #F44336;" onclick="showTasks('atrasadas')">
             <div class="stat-icon" style="background: #ffebee; color: #F44336;">
                 <i class="ph ph-warning-circle"></i>
             </div>
@@ -49,7 +52,7 @@
             </div>
         </div>
 
-        <div class="stat-card completed" style="border-left: 4px solid #4CAF50;">
+        <div class="stat-card interactive completed" style="border-left: 4px solid #4CAF50;" onclick="showTasks('concluidas')">
             <div class="stat-icon" style="background: #e8f5e9; color: #4CAF50;">
                 <i class="ph ph-check-circle"></i>
             </div>
@@ -59,6 +62,37 @@
             </div>
         </div>
         
+    </section>
+
+    <!-- Detalhes das Tarefas (Escondido Inicialmente) -->
+    <section id="task-details-container" class="task-details-container">
+        <div class="details-header">
+            <h2 id="details-title">Título do Grupo</h2>
+            <button class="btn-close-details" onclick="closeDetails()" title="Fechar">
+                <i class="ph ph-x"></i>
+            </button>
+        </div>
+
+        <!-- Grupos de Tarefas (Apenas um visível por vez) -->
+        <div id="loading-tasks" style="display:none; text-align: center; padding: 20px;">
+            <i class="ph ph-circle-notch animate-spin"></i> Carregando...
+        </div>
+
+        <div id="list-hoje" class="category-tasks" style="display:none;">
+            {% include "partials/_task_list_dashboard.html" with tarefas=tarefas_hoje_list empty_message="Nenhuma tarefa para hoje." %}
+        </div>
+
+        <div id="list-foco" class="category-tasks" style="display:none;">
+            {% include "partials/_task_list_dashboard.html" with tarefas=tarefas_foco_list empty_message="Nenhuma tarefa no foco atual." %}
+        </div>
+
+        <div id="list-atrasadas" class="category-tasks" style="display:none;">
+            {% include "partials/_task_list_dashboard.html" with tarefas=tarefas_atrasadas_list empty_message="Nenhuma tarefa atrasada." icon="ph-smiley" %}
+        </div>
+
+        <div id="list-concluidas" class="category-tasks" style="display:none;">
+            {% include "partials/_task_list_dashboard.html" with tarefas=tarefas_concluidas_list empty_message="Nenhuma tarefa concluída recentemente." %}
+        </div>
     </section>
 
     <section class="quick-actions" style="margin-top: 40px;">
@@ -76,12 +110,95 @@
             </a>
             
             {% if atrasadas > 0 %}
-            <a href="{% url 'minhas_tarefas' %}?filtro=atrasadas" class="action-card alert">
+            <a href="javascript:void(0)" onclick="showTasks('atrasadas')" class="action-card alert">
                 <i class="ph ph-fire"></i>
                 Resolver Pendências ({{ atrasadas }})
             </a>
             {% endif %}
         </div>
     </section>
+
+    <script>
+        function showTasks(type) {
+            const containers = document.querySelectorAll('.category-tasks');
+            const mainContainer = document.getElementById('task-details-container');
+            const titleHeader = document.getElementById('details-title');
+            
+            const titles = {
+                'hoje': 'Tarefas para Hoje',
+                'foco': 'Foco Atual',
+                'atrasadas': 'Tarefas Atrasadas',
+                'concluidas': 'Tarefas Concluídas'
+            };
+
+            titleHeader.innerText = titles[type];
+            
+            containers.forEach(c => {
+                c.style.display = 'none';
+            });
+
+            const activeList = document.getElementById('list-' + type);
+            if (activeList) {
+                activeList.style.display = 'block';
+            }
+
+            mainContainer.style.display = 'block';
+            
+            // Scroll suave ate o container
+            setTimeout(() => {
+                mainContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        function closeDetails() {
+            const mainContainer = document.getElementById('task-details-container');
+            mainContainer.style.opacity = '0';
+            setTimeout(() => {
+                mainContainer.style.display = 'none';
+                mainContainer.style.opacity = '1';
+            }, 300);
+        }
+
+        function toggleStepDashboard(checkbox) {
+            const etapaId = checkbox.getAttribute('data-etapa-id');
+            const stepText = checkbox.nextElementSibling;
+            const listItem = checkbox.closest('.step-item');
+            
+            // Feedback visual imediato
+            if (checkbox.checked) {
+                stepText.style.textDecoration = 'line-through';
+                stepText.style.color = '#a0aec0';
+                listItem.classList.add('completed');
+            } else {
+                stepText.style.textDecoration = 'none';
+                stepText.style.color = 'inherit';
+                listItem.classList.remove('completed');
+            }
+
+            // Usamos a função getCookie que já existe no script.js carregado pela base
+            const csrftoken = typeof getCookie === 'function' ? getCookie('csrftoken') : '';
+
+            fetch(`/tarefas/api/etapa/${etapaId}/toggle/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'sucesso') {
+                    // Opcional: Atualizar badge de status da tarefa
+                    const taskItem = checkbox.closest('.task-item-detail');
+                    const statusBadge = taskItem.querySelector('.task-status');
+                    if (statusBadge) {
+                        statusBadge.textContent = data.tarefa_status;
+                        statusBadge.className = 'task-status status-' + data.tarefa_status_code;
+                    }
+                }
+            })
+            .catch(error => console.error('Erro ao atualizar etapa:', error));
+        }
+    </script>
 
 {% endblock %}

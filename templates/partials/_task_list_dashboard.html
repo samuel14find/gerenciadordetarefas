@@ -1,0 +1,58 @@
+<div class="task-list-details">
+    {% for tarefa in tarefas %}
+        <div class="task-item-detail" id="task-{{ tarefa.id }}">
+            <div class="task-item-header">
+                <div class="task-main-info">
+                    <h3 class="task-item-title">{{ tarefa.titulo }}</h3>
+                    <div style="display: flex; gap: 8px; margin-top: 4px;">
+                        {% if tarefa.categoria %}
+                            <span class="category-tag" style="background-color: {{ tarefa.categoria.cor }};">
+                                {{ tarefa.categoria.nome }}
+                            </span>
+                        {% endif %}
+                        <span class="task-status status-{{ tarefa.status }}" 
+                              style="font-size: 0.7rem; padding: 2px 10px; border-radius: 12px; background: #f0f0f0; color: #666; font-weight: 600;">
+                            {{ tarefa.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+                <div class="task-actions">
+                    <a href="{% url 'editar_tarefa' tarefa.id %}" title="Editar" style="color: #666; font-size: 1.2rem;">
+                        <i class="ph ph-note-pencil"></i>
+                    </a>
+                </div>
+            </div>
+
+            {% if tarefa.descricao %}
+                <div class="task-item-description">{{ tarefa.descricao }}</div>
+            {% endif %}
+
+            {% if tarefa.etapas.all %}
+                <div class="steps-section">
+                    <span class="steps-title">Etapas</span>
+                    <ul class="steps-grid">
+                        {% for etapa in tarefa.etapas.all %}
+                            <li class="step-item {% if etapa.concluida %}completed{% endif %}" style="margin-bottom: 5px;">
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; width: 100%;">
+                                    <input type="checkbox" 
+                                           {% if etapa.concluida %}checked{% endif %} 
+                                           data-etapa-id="{{ etapa.id }}"
+                                           onchange="toggleStepDashboard(this)"
+                                           style="width: 18px; height: 18px; accent-color: #2196F3; cursor: pointer;">
+                                    <span class="step-text" style="font-size: 0.95rem; transition: all 0.2s; {% if etapa.concluida %}text-decoration: line-through; color: #a0aec0;{% endif %}">
+                                        {{ etapa.descricao }}
+                                    </span>
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <div class="empty-state">
+            <i class="ph {{ icon|default:'ph-clipboard-text' }}"></i>
+            <p>{{ empty_message|default:"Nenhuma tarefa encontrada." }}</p>
+        </div>
+    {% endfor %}
+</div>
