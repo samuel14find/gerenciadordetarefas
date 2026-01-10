@@ -1009,3 +1009,64 @@ body.page-comment {
     margin-bottom: 15px;
     display: block;
 }
+/* ==================================================
+   --- Página de Status (Geral) ---
+   ================================================== */
+
+body.page-status {
+    background-color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.status-card {
+    background-color: var(--card-bg);
+    width: 100%;
+    max-width: 500px;
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.status-card .icon {
+    font-size: 4rem;
+    color: var(--color-success);
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.status-card h1 {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.status-card p {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+    background-color: #3b56a0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
